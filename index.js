@@ -1,39 +1,34 @@
-var $ = require("jquery/dist/jquery");
-var data = require('./data.json');
-
-// console.log(data);
+(function(){
+	console.log('Start');
 
 
+	$('#sendAjaxBtn').click(function(){
+		console.log('click btn');
 
-$.ajax({
-	url : "http://localhost:3000",
-	method:"POST",
-	data : { id:"sss", password:"chut"}
-})
-.done(function( response ) {
-  console.log( "Sample of data:", response );
-  response.headers['Content-Type'];
-  response.statusCode;
-  response.data.userName;
-});
+		var url = "http://localhost:3000/places";
+		$.ajax(url).done(ajaxDone).fail(ajaxFailed);
+	});
 
+	function ajaxDone(data, status){
+		console.log('done', data);
+		var places = data.places;
+		console.log(places);
 
+		for(var i=0; i<places.length; i++){
+			var place = places[i];
+			var newElement = "<li>" + place.nom +"</li>";
+			
+			if(place.nom === "IoT Valley"){
+				var motDePasse = place.password;
+				$('body').append('Mot de passe: ' + motDePasse);
+			}
 
+			$('#list').append(places);
+		}
+	};
 
+	function ajaxFailed(){
+		console.log('failed');
 
-
-
-
-
-
-var url = "http://localhost:300";
-console.log($);
-$.ajax({
-  type: 'GET',
-  url: url,
-  // data: postedData,
-  // dataType: 'json',
-  success: function( data ) {
-      console.log( "Sample of data:", data );
-  }
-});
+	};
+})();
